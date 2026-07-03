@@ -1,39 +1,3 @@
-import streamlit as st
-import json
-import os
-
-# डेटाबेस फ़ाइल
-DB_FILE = "mlm_store_data.json"
-
-def load_data():
-    if os.path.exists(DB_FILE):
-        with open(DB_FILE, "r") as f:
-            return json.load(f)
-    return {"ADMIN": {"name": "Main Admin", "sponsor_id": None, "wallet": 0.0}}
-
-def save_data(data):
-    with open(DB_FILE, "w") as f:
-        json.dump(data, f, indent=4)
-
-# ऐप की स्क्रीन का डिज़ाइन (UI)
-st.title("🍵 चाय पत्ती - 7 Level MLM सिस्टम")
-st.write("MRP: ₹20 | नेटवर्क कमीशन डिस्ट्रीब्यूशन: ₹5")
-
-data = load_data()
-
-# टैब बनाना (अलग-अलग स्क्रीन)
-tab1, tab2, tab3 = st.tabs(["👤 नया मेंबर जोड़ें", "🛒 चाय पत्ती बिक्री", "💰 वॉलेट बैलेंस देखें"])
-
-with tab1:
-    st.header("नया रजिस्ट्रेशन")
-    new_id = st.text_input("यूजर आईडी (Unique ID बनाएं जैसे: CUST101)").strip()
-    new_name = st.text_input("मेंबर का नाम")
-    sponsor_id = st.text_input("स्पॉन्सर आईडी (जिसने इस मेंबर को जोड़ा)").strip()
-    
-    if st.button("रजिस्टर करें"):
-        if not new_id or not new_name:
-            st.error("कृपया आईडी और नाम दोनों भरें!")
-        elif new_id in data:
             st.error("यह आईडी पहले से मौजूद है!")
         elif sponsor_id and sponsor_id not in data:
             st.error("स्पॉन्सर आईडी गलत है या सिस्टम में नहीं है!")
